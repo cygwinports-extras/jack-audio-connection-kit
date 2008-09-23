@@ -1,0 +1,17 @@
+--- origsrc/jack-audio-connection-kit-0.109.2/jackd/Makefile.am	2008-01-30 12:23:51.000000000 -0600
++++ src/jack-audio-connection-kit-0.109.2/jackd/Makefile.am	2008-09-22 13:56:44.350897400 -0500
+@@ -30,11 +30,11 @@
+ 
+ BUILT_SOURCES = jack_md5.h
+ 
+-jack_md5.h: jackd
++jack_md5.h: jackd$(EXEEXT)
+ if STRIPPED_JACKD
+-	strip -R .note -R .comment .libs/jackd
++	strip -R .note -R .comment .libs/jackd$(EXEEXT)
+ endif
+-	echo "#define JACKD_MD5_SUM \"`md5sum .libs/jackd | awk '{print $$1}'`\"" > jack_md5.h
++	echo "#define JACKD_MD5_SUM \"`md5sum .libs/jackd$(EXEEXT) | awk '{print $$1}'`\"" > jack_md5.h
+ 
+ jackstart_SOURCES = jackstart.c md5.c
+ jackstart_LDFLAGS = -lcap

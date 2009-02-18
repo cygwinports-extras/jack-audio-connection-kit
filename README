@@ -9,15 +9,17 @@ JACK server (ie. as a plugin).
 
 Runtime requirements:
   cygwin-1.5.25-15
-  libreadline6-5.2.12-10
+  libcelt0-0.5.1-1
+  libreadline6-5.2.13-11
+  libsamplerate0-0.1.7-1
   libsndfile1-1.0.17-2
 
 Build requirements:
 (besides corresponding -devel packages)
-  autoconf2.5-2.61-1
-  automake1.9-1.9.6-2
+  autoconf2.5-2.63-1
+  automake1.10-1.10.1-2
   binutils-20080624-2
-  cygport-0.4.0-1
+  cygport-0.4.3-1
   gawk-3.1.6-1
   gcc-core-3.4.4-3
   libtool-2.2.2-2
@@ -29,23 +31,23 @@ Canonical website:
   http://jackaudio.org/
 
 Canonical download:
-  http://downloads.sourceforge.net/jackit/
   http://jackaudio.org/downloads/
 
 -------------------------------------------
 
 Build instructions:
-  unpack jack-audio-connection-kit-0.109.2-X-src.tar.bz2
+  unpack jack-audio-connection-kit-0.116.2-X-src.tar.bz2
     if you use setup to install this src package, it will be
 	 unpacked under /usr/src automatically
   cd /usr/src
-  cygport ./jack-audio-connection-kit-0.109.2-X.cygport all
+  cygport ./jack-audio-connection-kit-0.116.2-X.cygport all
 
 This will create:
-  /usr/src/jack-audio-connection-kit-0.109.2-X-src.tar.bz2
-  /usr/src/jack-audio-connection-kit-0.109.2-X.tar.bz2
-  /usr/src/libjack-devel-0.109.2-X.tar.bz2
-  /usr/src/libjack0-0.109.2-X.tar.bz2
+  /usr/src/jack-audio-connection-kit-0.116.2-X-src.tar.bz2
+  /usr/src/jack-audio-connection-kit-0.116.2-X.tar.bz2
+  /usr/src/jackd-0.116.2-X.tar.bz2
+  /usr/src/libjack-devel-0.116.2-X.tar.bz2
+  /usr/src/libjack0-0.116.2-X.tar.bz2
 
 -------------------------------------------
 
@@ -53,7 +55,6 @@ Files included in the binary packages:
 
 (jack-audio-connection-kit)
   /usr/bin/jack_alias.exe
-  /usr/bin/jack_bufsize.exe
   /usr/bin/jack_connect.exe
   /usr/bin/jack_disconnect.exe
   /usr/bin/jack_evmon.exe
@@ -65,27 +66,34 @@ Files included in the binary packages:
   /usr/bin/jack_midiseq.exe
   /usr/bin/jack_midisine.exe
   /usr/bin/jack_monitor_client.exe
+  /usr/bin/jack_netsource.exe
   /usr/bin/jack_showtime.exe
   /usr/bin/jack_simple_client.exe
   /usr/bin/jack_transport.exe
+  /usr/bin/jack_transport_client.exe
   /usr/bin/jack_unload.exe
-  /usr/bin/jackd.exe
   /usr/bin/jackrec.exe
-  /usr/bin/jackstart
   /usr/lib/jack/inprocess.dll
   /usr/lib/jack/inprocess.la
   /usr/lib/jack/intime.dll
   /usr/lib/jack/intime.la
+  /usr/share/doc/jack-audio-connection-kit-0.116.2/AUTHORS
+  /usr/share/doc/jack-audio-connection-kit-0.116.2/COPYING
+  /usr/share/doc/jack-audio-connection-kit-0.116.2/README
+  /usr/share/doc/jack-audio-connection-kit-0.116.2/TODO
+
+(jackd)
+  /usr/bin/cygjackserver-0.dll
+  /usr/bin/jackd.exe
+  /usr/bin/jackstart
   /usr/lib/jack/jack_dummy.dll
   /usr/lib/jack/jack_dummy.la
+  /usr/lib/jack/jack_net.dll
+  /usr/lib/jack/jack_net.la
   /usr/lib/jack/jack_oss.dll
   /usr/lib/jack/jack_oss.la
   /usr/share/man/man1/jackd.1.gz
   /usr/share/man/man1/jackstart.1.gz
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/AUTHORS
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/COPYING
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/README
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/TODO
 
 (libjack0)
   /usr/bin/cygjack-0.dll
@@ -102,64 +110,17 @@ Files included in the binary packages:
   /usr/include/jack/types.h
   /usr/lib/libjack.dll.a
   /usr/lib/libjack.la
+  /usr/lib/libjackserver.dll.a
+  /usr/lib/libjackserver.la
   /usr/lib/pkgconfig/jack.pc
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/annotated.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/deprecated.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/doxygen.css
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/doxygen.png
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/files.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/functions.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/functions_vars.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/globals.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/globals_0x65.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/globals_0x69.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/globals_0x6a.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/globals_0x6d.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/globals_0x6f.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/globals_0x70.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/globals_0x72.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/globals_0x74.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/globals_defs.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/globals_enum.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/globals_eval.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/globals_func.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/globals_type.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/globals_vars.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/index.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/inprocess_8c.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/intclient_8h-source.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/intclient_8h.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/jack_8h-source.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/jack_8h.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/mainpage_8dox.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/midiport_8h-source.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/midiport_8h.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/pages.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/porting-guide.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/porting_8dox.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/ringbuffer_8h-source.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/ringbuffer_8h.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/simple__client_8c.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/statistics_8h-source.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/statistics_8h.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/struct__jack__midi__event.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/structjack__position__t.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/structjack__ringbuffer__data__t.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/structjack__ringbuffer__t.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/structjack__transport__info__t.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/structport__pair__t.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/thread_8h-source.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/thread_8h.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/transport-design.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/transport_8dox.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/transport_8h-source.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/transport_8h.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/types_8h-source.html
-  /usr/share/doc/jack-audio-connection-kit-0.109.2/reference/html/types_8h.html
+  /usr/share/doc/jack-audio-connection-kit-0.116.2/reference/html/*
 
 ------------------
 
 Port Notes:
+
+----- version 0.116.2-1 -----
+Version bump.
 
 ----- version 0.109.2-1 -----
 Initial release for Cygwin.

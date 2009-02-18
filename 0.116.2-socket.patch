@@ -1,0 +1,24 @@
+--- origsrc/jack-audio-connection-kit-0.116.2/drivers/netjack/net_driver.c	2009-02-06 04:34:50.000000000 -0600
++++ src/jack-audio-connection-kit-0.116.2/drivers/netjack/net_driver.c	2009-02-17 14:31:37.012250000 -0600
+@@ -497,7 +497,7 @@ net_driver_write (net_driver_t* driver, 
+     {
+ 	int r;
+ 
+-#ifdef __APPLE__
++#ifndef MSG_CONFIRM
+ 	static const int flag = 0;
+ #else
+ 	static const int flag = MSG_CONFIRM;
+--- origsrc/jack-audio-connection-kit-0.116.2/drivers/netjack/netjack_packet.c	2009-02-06 04:34:50.000000000 -0600
++++ src/jack-audio-connection-kit-0.116.2/drivers/netjack/netjack_packet.c	2009-02-17 14:32:48.902875000 -0600
+@@ -62,6 +62,10 @@
+ #include "net_driver.h"
+ #include "netjack_packet.h"
+ 
++#ifndef MSG_DONTWAIT
++#define MSG_DONTWAIT 0
++#endif
++
+ int fraggo = 0;
+ 
+ packet_cache *global_packcache;

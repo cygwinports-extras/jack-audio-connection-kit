@@ -1,0 +1,135 @@
+--- origsrc/jack-audio-connection-kit-0.116.2/configure.ac	2009-02-06 04:40:56.000000000 -0600
++++ src/jack-audio-connection-kit-0.116.2/configure.ac	2009-02-17 20:24:21.543500000 -0600
+@@ -657,8 +657,6 @@ if test x$HAVE_SAMPLERATE = xfalse; then
+         AC_MSG_WARN([*** the NetJack backend and internal client will not be built])
+     	AC_DEFINE(HAVE_SAMPLERATE,0,"Whether libsamplerate is available")
+ else
+-	CFLAGS="$CFLAGS $SAMPLERATE_CFLAGS"
+-	LIBS="$LIBS $SAMPLERATE_LIBS"
+     	AC_DEFINE(HAVE_SAMPLERATE,1,"Whether libsamplerate is available")
+ fi
+ 
+@@ -672,7 +670,6 @@ if test x$HAVE_CELT = xfalse; then
+ else
+     	AC_DEFINE(HAVE_CELT,1,"Whether CELT is available")
+ 	AC_MSG_RESULT(yes)
+-	LIBS="$LIBS $CELT_LIBS"
+ fi
+ 
+ # Note: A bug in pkg-config causes problems if the first occurence of
+--- origsrc/jack-audio-connection-kit-0.116.2/drivers/dummy/Makefile.am	2009-02-17 21:45:05.637250000 -0600
++++ src/jack-audio-connection-kit-0.116.2/drivers/dummy/Makefile.am	2009-02-17 14:25:50.762250000 -0600
+@@ -6,8 +6,9 @@ plugindir = $(ADDON_DIR)
+ 
+ plugin_LTLIBRARIES = jack_dummy.la
+ 
+-jack_dummy_la_LDFLAGS = -module -avoid-version
++jack_dummy_la_LDFLAGS = -module -avoid-version -no-undefined
+ jack_dummy_la_SOURCES = dummy_driver.c dummy_driver.h
++jack_dummy_la_LIBADD = $(top_builddir)/jackd/libjackserver.la
+ 
+ noinst_HEADERS = dummy_driver.h
+ 
+--- origsrc/jack-audio-connection-kit-0.116.2/drivers/netjack/Makefile.am	2009-02-06 04:34:50.000000000 -0600
++++ src/jack-audio-connection-kit-0.116.2/drivers/netjack/Makefile.am	2009-02-17 20:25:30.012250000 -0600
+@@ -1,6 +1,6 @@
+ MAINTAINCLEANFILES = Makefile.in
+ 
+-AM_CFLAGS = $(JACK_CFLAGS) 
++AM_CFLAGS = $(JACK_CFLAGS) $(CELT_CFLAGS) $(SAMPLERATE_CFLAGS)
+ 
+ 
+ plugindir = $(ADDON_DIR)
+@@ -8,8 +8,9 @@ plugindir = $(ADDON_DIR)
+ plugin_LTLIBRARIES = jack_net.la
+ 
+ 
+-jack_net_la_LDFLAGS = -module -avoid-version 
++jack_net_la_LDFLAGS = -module -avoid-version -no-undefined
+ jack_net_la_SOURCES = net_driver.c netjack_packet.c
++jack_net_la_LIBADD = $(top_builddir)/jackd/libjackserver.la $(CELT_LIBS) $(SAMPLERATE_LIBS)
+ 
+ noinst_HEADERS = net_driver.h netjack_packet.h
+ 
+--- origsrc/jack-audio-connection-kit-0.116.2/drivers/oss/Makefile.am	2009-02-17 21:45:05.637250000 -0600
++++ src/jack-audio-connection-kit-0.116.2/drivers/oss/Makefile.am	2009-02-17 14:24:50.965375000 -0600
+@@ -6,7 +6,8 @@ plugindir = $(ADDON_DIR)
+ 
+ plugin_LTLIBRARIES = jack_oss.la
+ 
+-jack_oss_la_LDFLAGS = -module -avoid-version
++jack_oss_la_LDFLAGS = -module -avoid-version -no-undefined
+ jack_oss_la_SOURCES = oss_driver.c oss_driver.h
++jack_oss_la_LIBADD = $(top_builddir)/jackd/libjackserver.la
+ 
+ noinst_HEADERS = oss_driver.h
+--- origsrc/jack-audio-connection-kit-0.116.2/drivers/portaudio/Makefile.am	2009-02-17 21:45:05.652875000 -0600
++++ src/jack-audio-connection-kit-0.116.2/drivers/portaudio/Makefile.am	2009-02-17 14:26:29.512250000 -0600
+@@ -6,9 +6,10 @@ plugindir = $(ADDON_DIR)
+ 
+ plugin_LTLIBRARIES = jack_portaudio.la
+ 
+-jack_portaudio_la_LDFLAGS = -module -avoid-version
++jack_portaudio_la_LDFLAGS = -module -avoid-version -no-undefined
+ jack_portaudio_la_SOURCES = portaudio_driver.c portaudio_driver.h
+ 
+ noinst_HEADERS = portaudio_driver.h
+ 
+-jack_portaudio_la_LIBADD = $(PA_LIBS)
++jack_portaudio_la_LIBADD = $(PA_LIBS) $(top_builddir)/jackd/libjackserver.la
++
+--- origsrc/jack-audio-connection-kit-0.116.2/example-clients/Makefile.am	2009-02-17 21:45:05.731000000 -0600
++++ src/jack-audio-connection-kit-0.116.2/example-clients/Makefile.am	2009-02-17 14:00:48.000000000 -0600
+@@ -51,8 +51,10 @@ ip_clientdir = $(ADDON_DIR)
+ 
+ ip_client_LTLIBRARIES = inprocess.la intime.la
+ 
+-inprocess_la_LDFLAGS = -module -avoid-version @OS_LDFLAGS@
++inprocess_la_LDFLAGS = -module -avoid-version -no-undefined @OS_LDFLAGS@
+ inprocess_la_SOURCES = inprocess.c
++inprocess_la_LIBADD = $(top_builddir)/libjack/libjack.la
+ 
+-intime_la_LDFLAGS = -module -avoid-version @OS_LDFLAGS@
++intime_la_LDFLAGS = -module -avoid-version -no-undefined @OS_LDFLAGS@
+ intime_la_SOURCES = intime.c
++intime_la_LIBADD = $(top_builddir)/libjack/libjack.la
+--- origsrc/jack-audio-connection-kit-0.116.2/jackd/Makefile.am	2009-02-17 14:00:46.434125000 -0600
++++ src/jack-audio-connection-kit-0.116.2/jackd/Makefile.am	2009-02-17 14:22:02.106000000 -0600
+@@ -48,7 +48,7 @@ libjackserver_la_SOURCES = engine.c clie
+ 			../libjack/messagebuffer.c ../libjack/pool.c ../libjack/port.c ../libjack/midiport.c ../libjack/ringbuffer.c ../libjack/shm.c \
+ 			../libjack/thread.c ../libjack/time.c  ../libjack/transclient.c  ../libjack/unlock.c
+ libjackserver_la_LIBADD  = simd.lo @OS_LDFLAGS@
+-libjackserver_la_LDFLAGS  = -export-dynamic -version-info @JACK_SO_VERSION@
++libjackserver_la_LDFLAGS  = -export-dynamic -no-undefined -version-info @JACK_SO_VERSION@
+ 
+ simd.lo: $(srcdir)/../libjack/simd.c
+ 	$(LIBTOOL) --mode=compile $(CC) -I$(top_builddir) $(JACK_CORE_CFLAGS) $(SIMD_CFLAGS) -c -o simd.lo $(srcdir)/../libjack/simd.c
+--- origsrc/jack-audio-connection-kit-0.116.2/libjack/Makefile.am	2009-02-17 21:45:05.731000000 -0600
++++ src/jack-audio-connection-kit-0.116.2/libjack/Makefile.am	2009-02-17 14:00:48.000000000 -0600
+@@ -38,5 +38,5 @@ libjack_la_CFLAGS = $(AM_CFLAGS)
+ 
+ libjack_la_SOURCES = $(SOURCE_FILES)
+ libjack_la_LIBADD  = simd.lo @OS_LDFLAGS@
+-libjack_la_LDFLAGS  = -export-dynamic -version-info @JACK_SO_VERSION@
++libjack_la_LDFLAGS  = -export-dynamic -no-undefined -version-info @JACK_SO_VERSION@
+ 
+--- origsrc/jack-audio-connection-kit-0.116.2/tools/Makefile.am	2009-02-06 04:34:49.000000000 -0600
++++ src/jack-audio-connection-kit-0.116.2/tools/Makefile.am	2009-02-17 20:27:53.043500000 -0600
+@@ -59,7 +59,7 @@ if HAVE_SNDFILE
+ sndfile_cflags = @SNDFILE_CFLAGS@
+ endif
+ 
+-AM_CFLAGS = -I.. $(JACK_CFLAGS) $(sndfile_cflags)
++AM_CFLAGS = -I.. $(JACK_CFLAGS) $(sndfile_cflags) $(CELT_CFLAGS) $(SAMPLERATE_CFLAGS)
+ AM_CXXFLAGS = -I.. $(JACK_CFLAGS) $(sndfile_cflags)
+ 
+ jack_connect_SOURCES = connect.c
+@@ -124,7 +124,7 @@ jack_unload_LDADD = $(top_builddir)/libj
+ jack_netsource_SOURCES = netsource.c $(top_builddir)/drivers/netjack/netjack_packet.c
+ jack_netsource_CFLAGS = -I$(top_srcdir)/drivers/netjack
+ jack_netsource_LDFLAGS = @OS_LDFLAGS@
+-jack_netsource_LDADD = $(top_builddir)/libjack/libjack.la
++jack_netsource_LDADD = $(top_builddir)/libjack/libjack.la $(CELT_LIBS) $(SAMPLERATE_LIBS)
+ 
+ if HAVE_SAMPLERATE
+ if HAVE_ALSA

@@ -1,5 +1,5 @@
 category: Audio
-requires: cygwin libjack0 libcelt0 libreadline6 libsamplerate0 libsndfile1
+requires: libjack0 libcelt0 libreadline6 libsamplerate0 libsndfile1
 sdesc: "Low-latency audio server (clients)"
 ldesc: "JACK is a low-latency audio server, written for POSIX conformant 
 operating systems such as GNU/Linux and Apple's OS X. It can connect a 

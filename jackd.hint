@@ -1,5 +1,5 @@
 category: Audio
-requires: cygwin libcelt0 libsamplerate0
+requires: libcelt0 libsamplerate0
 external-source: jack-audio-connection-kit
 sdesc: "Low-latency audio server (daemon)"
 ldesc: "JACK is a low-latency audio server, written for POSIX conformant 

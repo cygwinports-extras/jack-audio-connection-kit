@@ -1,0 +1,82 @@
+--- origsrc/jack-audio-connection-kit-0.121.2/drivers/dummy/Makefile.am	2011-06-08 18:54:49.000000000 -0500
++++ src/jack-audio-connection-kit-0.121.2/drivers/dummy/Makefile.am	2011-06-30 20:34:57.017467700 -0500
+@@ -6,7 +6,7 @@ plugindir = $(ADDON_DIR)
+ 
+ plugin_LTLIBRARIES = jack_dummy.la
+ 
+-jack_dummy_la_LDFLAGS = -module -avoid-version
++jack_dummy_la_LDFLAGS = -module -avoid-version -no-undefined -shrext ".so"
+ jack_dummy_la_SOURCES = dummy_driver.c dummy_driver.h
+ 
+ noinst_HEADERS = dummy_driver.h
+--- origsrc/jack-audio-connection-kit-0.121.2/drivers/netjack/Makefile.am	2011-06-08 18:54:48.000000000 -0500
++++ src/jack-audio-connection-kit-0.121.2/drivers/netjack/Makefile.am	2011-06-30 20:35:20.557908700 -0500
+@@ -7,7 +7,7 @@ plugindir = $(ADDON_DIR)
+ 
+ plugin_LTLIBRARIES = jack_net.la
+ 
+-jack_net_la_LDFLAGS = -module -avoid-version @NETJACK_LIBS@
++jack_net_la_LDFLAGS = -module -avoid-version -no-undefined @NETJACK_LIBS@ -shrext ".so"
+ jack_net_la_CFLAGS = @NETJACK_CFLAGS@
+ jack_net_la_SOURCES = net_driver.c netjack_packet.c netjack.c
+ jack_net_la_LIBADD = $(top_builddir)/libjack/libjack.la $(top_builddir)/jackd/libjackserver.la
+--- origsrc/jack-audio-connection-kit-0.121.2/drivers/oss/Makefile.am	2011-06-08 18:54:49.000000000 -0500
++++ src/jack-audio-connection-kit-0.121.2/drivers/oss/Makefile.am	2011-06-30 20:35:32.944330300 -0500
+@@ -6,7 +6,7 @@ plugindir = $(ADDON_DIR)
+ 
+ plugin_LTLIBRARIES = jack_oss.la
+ 
+-jack_oss_la_LDFLAGS = -module -avoid-version
++jack_oss_la_LDFLAGS = -module -avoid-version -no-undefined -shrext ".so"
+ jack_oss_la_SOURCES = oss_driver.c oss_driver.h
+ jack_oss_la_LIBADD = $(top_builddir)/libjack/libjack.la $(top_builddir)/jackd/libjackserver.la
+ 
+--- origsrc/jack-audio-connection-kit-0.121.2/drivers/portaudio/Makefile.am	2008-05-29 07:26:08.000000000 -0500
++++ src/jack-audio-connection-kit-0.121.2/drivers/portaudio/Makefile.am	2011-06-30 20:35:57.732773600 -0500
+@@ -6,9 +6,9 @@ plugindir = $(ADDON_DIR)
+ 
+ plugin_LTLIBRARIES = jack_portaudio.la
+ 
+-jack_portaudio_la_LDFLAGS = -module -avoid-version
++jack_portaudio_la_LDFLAGS = -module -avoid-version -no-undefined -shrext ".so"
+ jack_portaudio_la_SOURCES = portaudio_driver.c portaudio_driver.h
+ 
+ noinst_HEADERS = portaudio_driver.h
+ 
+-jack_portaudio_la_LIBADD = $(PA_LIBS)
++jack_portaudio_la_LIBADD = $(PA_LIBS) $(top_builddir)/jackd/libjackserver.la
+--- origsrc/jack-audio-connection-kit-0.121.2/example-clients/Makefile.am	2011-06-08 18:54:48.000000000 -0500
++++ src/jack-audio-connection-kit-0.121.2/example-clients/Makefile.am	2011-06-30 20:36:37.930045100 -0500
+@@ -85,8 +85,10 @@ ip_clientdir = $(ADDON_DIR)
+ 
+ ip_client_LTLIBRARIES = inprocess.la intime.la
+ 
+-inprocess_la_LDFLAGS = -module -avoid-version @OS_LDFLAGS@
++inprocess_la_LDFLAGS = -module -avoid-version -no-undefined @OS_LDFLAGS@ -shrext ".so"
+ inprocess_la_SOURCES = inprocess.c
++inprocess_la_LIBADD = $(top_builddir)/libjack/libjack.la
+ 
+-intime_la_LDFLAGS = -module -avoid-version @OS_LDFLAGS@
++intime_la_LDFLAGS = -module -avoid-version -no-undefined @OS_LDFLAGS@ -shrext ".so"
+ intime_la_SOURCES = intime.c
++intime_la_LIBADD = $(top_builddir)/libjack/libjack.la
+--- origsrc/jack-audio-connection-kit-0.121.2/jackd/Makefile.am	2011-06-30 20:33:34.356921600 -0500
++++ src/jack-audio-connection-kit-0.121.2/jackd/Makefile.am	2011-06-30 20:36:53.357275500 -0500
+@@ -52,7 +52,7 @@ libjackserver_la_SOURCES = engine.c clie
+         ../libjack/thread.c ../libjack/time.c  ../libjack/transclient.c \
+         ../libjack/unlock.c
+ libjackserver_la_LIBADD  = simd.lo @OS_LDFLAGS@ 
+-libjackserver_la_LDFLAGS  = -export-dynamic -version-info @JACK_SO_VERSION@
++libjackserver_la_LDFLAGS  = -export-dynamic -version-info @JACK_SO_VERSION@ -no-undefined
+ 
+ simd.lo: $(srcdir)/../libjack/simd.c
+ 	$(LIBTOOL) --mode=compile $(CC) -I$(top_builddir) $(JACK_CORE_CFLAGS) $(SIMD_CFLAGS) -c -o simd.lo $(srcdir)/../libjack/simd.c
+--- origsrc/jack-audio-connection-kit-0.121.2/libjack/Makefile.am	2009-02-23 07:55:57.000000000 -0600
++++ src/jack-audio-connection-kit-0.121.2/libjack/Makefile.am	2011-06-30 20:37:14.166112000 -0500
+@@ -38,5 +38,5 @@ libjack_la_CFLAGS = $(AM_CFLAGS)
+ 
+ libjack_la_SOURCES = $(SOURCE_FILES)
+ libjack_la_LIBADD  = simd.lo @OS_LDFLAGS@
+-libjack_la_LDFLAGS  = -export-dynamic -version-info @JACK_SO_VERSION@
++libjack_la_LDFLAGS  = -export-dynamic -version-info @JACK_SO_VERSION@ -no-undefined
+ 

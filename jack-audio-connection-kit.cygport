@@ -1,0 +1,54 @@
+NAME="jack-audio-connection-kit"
+VERSION=0.121.3
+RELEASE=1
+CATEGORY="Audio"
+SUMMARY="Low-latency audio server"
+DESCRIPTION="JACK is a low-latency audio server, written for POSIX conformant
+operating systems such as GNU/Linux and Apple's OS X. It can connect a number
+of different applications to an audio device, as well as allowing them to
+share audio between themselves. Its clients can run in their own processes
+(ie. as normal applications), or can they can run within the JACK server
+(ie. as a plugin)."
+HOMEPAGE="http://jackaudio.org/"
+SRC_URI="http://jackaudio.org/downloads/${NAME}-${VERSION}.tar.gz"
+PATCH_URI="
+	0.109.2-jackd-EXEEXT.patch
+	0.121.2-no-undefined.patch
+	0.121.3-weak-symbols.patch
+	0.121.3-no-realtime.patch
+"
+
+PKG_NAMES="${NAME} jackd libjack0 libjack-devel libjack-doc"
+jack_audio_connection_kit_CONTENTS="--exclude=reference --exclude=jackd.exe
+                                    usr/bin/*.exe usr/lib/jack/in* usr/share/doc/"
+jackd_CONTENTS="usr/bin/cygjackserver-0.dll usr/bin/jackd.exe
+                usr/bin/jackstart usr/lib/jack/jack_* usr/share/man/"
+libjack0_CONTENTS="usr/bin/cygjack-0.dll"
+libjack_devel_CONTENTS="usr/include/ usr/lib/libjack.* usr/lib/pkgconfig/"
+libjack_doc_CATEGORY="Doc"
+libjack_doc_CONTENTS="usr/share/doc/${NAME}/reference/"
+
+# portaudio: incompatible with new API
+CYGCONF_ARGS="
+	--disable-altivec
+	--disable-alsa
+	--disable-capabilities
+	--disable-coreaudio
+	--disable-ensure-mlock
+	--disable-firewire
+	--disable-freebob
+	--enable-oss
+	--disable-portaudio
+	--enable-posix-shm
+	--with-html-dir=/usr/share/doc/${NAME}
+	--with-default-tmpdir=/tmp
+"
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+	dosym jackd.exe /usr/bin/jackstart
+}
+
+KEEP_LA_FILES="none"

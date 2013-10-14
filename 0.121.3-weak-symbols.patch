@@ -1,0 +1,45 @@
+--- origsrc/jack-audio-connection-kit-0.121.3/jack/weakjack.h	2011-09-28 07:27:47.000000000 -0500
++++ src/jack-audio-connection-kit-0.121.3/jack/weakjack.h	2013-10-14 14:24:13.720770500 -0500
+@@ -91,6 +91,7 @@
+ #define WEAK_ATTRIBUTE __weak__
+ #endif
+ 
++
+ #ifndef JACK_OPTIONAL_WEAK_EXPORT
+ /* JACK_OPTIONAL_WEAK_EXPORT needs to be a macro which
+    expands into a compiler directive. If non-null, the directive 
+@@ -98,7 +99,9 @@
+    the symbol it used with. For this to work fully may
+    require linker arguments for the client as well.
+ */
+-#ifdef __GNUC__
++#ifdef __CYGWIN__
++#define JACK_OPTIONAL_WEAK_EXPORT
++#elif defined __GNUC__
+ #define JACK_OPTIONAL_WEAK_EXPORT __attribute__((WEAK_ATTRIBUTE))
+ #else
+ /* Add other things here for non-gcc platforms */
+@@ -113,7 +116,9 @@
+    as deprecated. For this to work fully may require
+    linker arguments for the client as well.
+ */
+-#ifdef __GNUC__
++#ifdef __CYGWIN__
++#define JACK_OPTIONAL_WEAK_DEPRECATED_EXPORT __attribute__((__deprecated__))
++#elif defined __GNUC__
+ #define JACK_OPTIONAL_WEAK_DEPRECATED_EXPORT __attribute__((WEAK_ATTRIBUTE,__deprecated__))
+ #else
+ /* Add other things here for non-gcc platforms */
+--- origsrc/jack-audio-connection-kit-0.121.3/jack/weakmacros.h	2011-09-28 07:27:47.000000000 -0500
++++ src/jack-audio-connection-kit-0.121.3/jack/weakmacros.h	2013-10-14 14:23:48.810345700 -0500
+@@ -39,7 +39,9 @@
+ #endif
+ 
+ #ifndef JACK_WEAK_EXPORT
+-#ifdef __GNUC__
++#ifdef __CYGWIN__
++#define JACK_WEAK_EXPORT
++#elif defined __GNUC__
+ /* JACK_WEAK_EXPORT needs to be a macro which
+    expands into a compiler directive. If non-null, the directive 
+    must tell the compiler to arrange for weak linkage of 

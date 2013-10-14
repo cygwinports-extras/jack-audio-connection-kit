@@ -1,0 +1,24 @@
+--- origsrc/jack-audio-connection-kit-0.121.3/jackd/jackd.c	2011-06-08 18:54:48.000000000 -0500
++++ src/jack-audio-connection-kit-0.121.3/jackd/jackd.c	2013-10-14 14:57:01.652329700 -0500
+@@ -57,7 +57,7 @@ static JSList *drivers = NULL;
+ static sigset_t signals;
+ static jack_engine_t *engine = NULL;
+ static char *server_name = NULL;
+-static int realtime = 1;
++static int realtime = 0;
+ static int realtime_priority = 10;
+ static int do_mlock = 1;
+ static int temporary = 0;
+@@ -647,11 +647,11 @@ main (int argc, char *argv[])
+ 			break;
+ 
+ 		case 'r':
++			/* this is now the default */
+ 			realtime = 0;
+ 			break;
+ 
+ 		case 'R':
+-			/* this is now the default */
+ 			realtime = 1;
+ 			break;
+ 
